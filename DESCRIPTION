@@ -1,0 +1,10 @@
+Package: Q6
+Type: Package
+Title: RAM_PMM Package
+Version: 0.1.0
+Author: Michael Daniels
+Maintainer: aarti <aarti@msn.net>
+Description: something
+License: UTA
+LazyData: TRUE
+RoxygenNote: 5.0.1
