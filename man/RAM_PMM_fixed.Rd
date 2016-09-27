@@ -4,15 +4,33 @@
 \alias{RAM_PMM_fixed}
 \title{Function to perform RAM_PMM}
 \usage{
-RAM_PMM_fixed(Dataset, Modelfile, NumberofIndicators)
+RAM_PMM_fixed(Dataset, Modelfile, NumberofIndicators = 7, n.chains = 2,
+  n.adapt = 1000, Intervention = "Z", Response = "Y2",
+  BaselineResponse = "Y1", Attempts = "R")
 }
 \arguments{
-\item{file}{having the data and model specifications}
+\item{Dataset}{A data file having coulmns named and placed in a fixed order}
+
+\item{Modelfile}{A WINBUGS model file}
+
+\item{NumberofIndicators}{Number of Indicator Centers (Xs)}
+
+\item{n.chains}{Parallel chains for the model}
+
+\item{n.adapt}{iterations for adaptations}
+
+\item{Intervention}{Column having name as Intervention}
+
+\item{Response}{Column having name as Response}
+
+\item{BaselineResponse}{Column having name as BaselineResponse}
+
+\item{Attempts}{Column hvaing name as Attempts}
 }
 \value{
-returns the summary
+The summary of the posterior distribution.
 }
 \description{
-It runs the nonignorable analyses for the RAM_PMM on the provided dataset
+It runs the nonignorable analyses for the RAM_PMM on the provided data
 }
 
