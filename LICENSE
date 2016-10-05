@@ -2,5 +2,4 @@
 
 export(RAMPMM)
 import(rjags)
-import(utils)
 import(xtable)
