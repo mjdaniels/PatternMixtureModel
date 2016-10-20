@@ -1,0 +1,102 @@
+## repeated pattern mixture model
+## nonignorable analysis
+## match the notations
+## 2014.11
+
+model{
+## the likelihood
+for(i in 1:409){
+## the conditional distribution of Y
+Y[i] ~ dnorm(mu[i], inv_tau)
+mu[i] <- alpha_0[R[i]]*(1-Z[i]) + alpha_1[R[i]]*Z[i] + beta_1[1]*X[i,1] + beta_1[2]*X[i,2]
++ beta_1[3]*X[i,3] + beta_1[4]*X[i,4]
+
+## distribution of X including baseline score X[i, 1] and indicators of center X[i, 2:5]
+X[i, 1] ~ dnorm(muX[i], inv_sigma)
+muX[i] <- alpha_00 + beta_0[1]*X[i, 2] + beta_0[2]*X[i, 3] + beta_0[3]*X[i, 4]
+X[i, 2:5] ~ dmulti(prX[1:4], 1)
+
+## hazard model for the pattern
+for(j in 1:3){
+logit(h[i, j]) <- lambda_0[j] + lambda_Z*Z[i] + lambda_X[1]*X[i,1] + lambda_X[2]*X[i,2]
++ lambda_X[3]*X[i,3] + lambda_X[4]*X[i,4]
+}
+
+## probabilities for being in each pattern
+R[i] ~ dcat(p[i, 1:4])
+p[i, 1] <- h[i, 1]
+p[i, 2] <- h[i, 2]*(1-p[i, 1])
+p[i, 3] <- h[i, 3]*(1-p[i, 1]-p[i, 2])
+p[i, 4] <- 1-sum(p[i, 1:3])
+
+}
+
+## MC integration
+## create L responses with covariates for each Z
+for(i in 1:L){
+Z_mc[i] <- 0
+Z_mc[i+L] <- 1
+}
+
+for(i in 1:L2){
+X_mc[i, 1] ~ dnorm(muX_mc[i], inv_sigma)
+muX_mc[i] <- alpha_00 + beta_0[1]*X_mc[i,2] + beta_0[2]*X_mc[i,3] + beta_0[3]*X_mc[i,4]
+X_mc[i, 2:5] ~ dmulti(prX[1:4], 1)
+
+## conditional mean of Y for each pattern
+for(k in 1:4){
+mu_mc[i, k] <- alpha_0[k]*(1-Z_mc[i]) + alpha_1[k]*Z_mc[i] + beta_1[1]*X_mc[i, 1] 
++ beta_1[2]*X_mc[i, 2] + beta_1[3]*X_mc[i, 3] + beta_1[4]*X_mc[i, 4]
+}
+
+## hazard model
+for(j in 1:3){
+logit(h_mc[i, j]) <- lambda_0[j] + lambda_Z*Z_mc[i] + lambda_X[1]*X_mc[i, 1] + lambda_X[2]*X_mc[i,2] 
++ lambda_X[3]*X_mc[i, 3] + lambda_X[4]*X_mc[i, 4]
+}
+
+## probabilities for being in each pattern
+p_mc[i, 1] <- h_mc[i, 1]
+p_mc[i, 2] <- h_mc[i, 2]*(1-p_mc[i, 1])
+p_mc[i, 3] <- h_mc[i, 3]*(1-p_mc[i, 1]-p_mc[i, 2])
+p_mc[i, 4] <- 1-sum(p_mc[i, 1:3])
+
+## average over patterns
+avg_mu_mc[i] <- mu_mc[i, 1]*p_mc[i, 1] + mu_mc[i, 2]*p_mc[i, 2] + mu_mc[i, 3]*p_mc[i, 3]
++ mu_mc[i, 4]*p_mc[i, 4]
+}
+
+## treatment effect on means
+m0 <- mean(avg_mu_mc[1:L])
+m1 <- mean(avg_mu_mc[(L+1):L2])
+theta <- m1 - m0
+
+## priors for identified parameters
+for(k in 1:3){
+alpha_0[k] ~ dnorm(0, 0.001)
+alpha_1[k] ~ dnorm(0, 0.001)
+beta_0[k] ~ dnorm(0, 0.001)
+lambda_0[k] ~ dnorm(0, 0.001)
+}
+
+for(j in 1:4){
+beta_1[j] ~ dnorm(0, 0.001)
+lambda_X[j] ~ dnorm(0, 0.001)
+}
+
+alpha_00 ~ dnorm(0, 0.001)
+lambda_Z ~ dnorm(0, 0.001)
+inv_tau ~ dgamma(0.01, 0.01)
+inv_sigma ~ dgamma(0.01, 0.01)
+prX[1:4] ~ ddirich(a[])
+
+## priors for unidentified parameters
+alpha_0[4] <- zeta_00 + zeta_10*(K+C)
+alpha_1[4] <- zeta_01 + zeta_11*(K+C)
+zeta_00 <- inprod(M[1, ], alpha_0[1:3])
+zeta_10 <- inprod(M[2, ], alpha_0[1:3])
+zeta_01 <- inprod(M[1, ], alpha_1[1:3])
+zeta_11 <- inprod(M[2, ], alpha_1[1:3])
+
+}
+

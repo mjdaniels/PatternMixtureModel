@@ -1,6 +1,6 @@
 #' Dataset file for the RAMPMM function
 #'
-#' A dataset containing the columns as we wanted them
+#' A dummy dataset to run the function RAMPMM on.
 #'
 
 #' @format A data frame with 409 rows and 7 variables:

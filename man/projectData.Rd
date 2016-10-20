@@ -19,7 +19,7 @@
 projectData
 }
 \description{
-A dataset containing the columns as we wanted them
+A dummy dataset to run the function RAMPMM on.
 }
 \keyword{datasets}
 
