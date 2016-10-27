@@ -22,7 +22,7 @@ For the column having values for 'Intervention’, users must either have name '
 
 1.  a JAGS code file that specifies a model in it. WINBUGS (Windows version of Bayesian inference Using Gibbs Sampling) is a MCMC software to implement Gibbs sampling, which generates samples from the posterior distribution. Alternative to WINBUGS is JAGS that is accessed in R via rjags to perform the Gibbs sampling. JAGS, written in C++, gets installed outide R and the user of this package must have it installed on their system. For help and instructions on how to install JAGS, user can visit <https://sourceforge.net/projects/mcmc-jags/files/> and download the latest version, 4.2.0 based user's Operating System.
 
-The model file has deterministic relations, stochastic relations through distributions suported in JAGS, and priors. The code is written in a dialect of the BUGS language that specifies the model. A model file JAGSmodel.txt' is provided with this pacakge.
+The model file has deterministic relations, stochastic relations through distributions suported in JAGS, and priors. The code is written in a dialect of the BUGS language that specifies the model. A model file Model\_JAGSfile.txt' is provided with this pacakge inside the inst/ folder.
 
 Rjags' jags.model() function sends the model in the file to JAGS for parsing and compiling. On compilation, the code syntax is turned into a set of sequential instructions and the compiler resolves the names and links in the model. The function generates 1000 samples (updates) of the MCMC algorithm.
 
@@ -37,7 +37,7 @@ You can install Q6 from github with:
 
 ``` r
 # install.packages("devtools")
-devtools::install_github("mjdaniels/RAM_PMM")
+devtools::install_github("mjdaniels/PatternMixtureModelforRepeatedAttemptData")
 ```
 
 Example
@@ -46,12 +46,12 @@ Example
 This is a basic example which shows you how to solve a common problem:
 
 ``` r
-# Run the package by following command
+# Run the function by following command
 
 # You will have to provide two files, 1. the dataset file 2. the JAGS model file. ( NOTE: if they are not in the same working directory, then provide the full path to the files.)
 # Also, the dataset must have the column names either as default names for each column in the argument or provide the respective names while calling this function.
 
-RAMPMM::PMM("/Users/as82986/Datasetfile.txt", "/Users/as82986/Model_JAGSfile.txt")
+PatternMixtureModel::PMM("/Users/as82986/Datasetfile.txt", system.file("extdata", "Model_JAGSfile.txt", package = "PatternMixtureModel"))
 #> Compiling model graph
 #>    Resolving undeclared variables
 #>    Allocating nodes

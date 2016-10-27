@@ -68,7 +68,7 @@ This is a basic example which shows you how to solve a common problem:
 # You will have to provide two files, 1. the dataset file 2. the JAGS model file. ( NOTE: if they are not in the same working directory, then provide the full path to the files.)
 # Also, the dataset must have the column names either as default names for each column in the argument or provide the respective names while calling this function.
 
-PatternMixtureModel::PMM("/Users/as82986/Datasetfile.txt", "/Users/as82986/Model_JAGSfile.txt")
+PatternMixtureModel::PMM("/Users/as82986/Datasetfile.txt", system.file("extdata", "Model_JAGSfile.txt", package = "PatternMixtureModel"))
 
 
 ```
