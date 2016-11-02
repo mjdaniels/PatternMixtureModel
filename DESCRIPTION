@@ -3,7 +3,7 @@ Type: Package
 Title: Pattern Mixture Model for Repeated Attempts Designs
 Version: 0.1.0
 Author: Michael Daniels
-Maintainer: Michael <mdstat2016@gmail.com>
+Maintainer: Michael Daniels <mdstat2016@gmail.com>
 Description: We have here a function PMM ( Pattern Mixture Model) that performs the nonignorable analyses.
 License: MIT + file LICENSE
 LazyData: TRUE

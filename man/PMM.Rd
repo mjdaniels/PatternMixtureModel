@@ -6,7 +6,7 @@
 \usage{
 PMM(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1",
   Attempts = "R", Intervention = "Z", NumberofIndicators = 3,
-  n.chains = 2, n.adapt = 1000)
+  n.chains = 2, n.adapt = 1000, AttemptsMax = 3, ParamSens = 0)
 }
 \arguments{
 \item{Dataset}{A data file ( txt/csv) having coulmns that are named and placed in a specific order.}
@@ -26,6 +26,10 @@ PMM(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1",
 \item{n.chains}{Parallel chains for the model}
 
 \item{n.adapt}{The number of iterations for adaptation.}
+
+\item{AttemptsMax}{Maximum Number of Attempts to collect the output}
+
+\item{ParamSens}{The Sensitivity Parameter C; Possible Values 0,1,2,3.}
 }
 \value{
 The summary of the posterior distribution. User will get an object named 'Results' in the global environment. Corresponding values for any particular column can be obtained by Results$columnname.

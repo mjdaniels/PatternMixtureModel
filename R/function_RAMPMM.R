@@ -11,18 +11,20 @@
 #' @param Response Column having values for 'Response'. Users must either have name 'Y2' for this column in their data or provide the name for this column as per their dataset.
 #' @param BaselineResponse  Column having values for 'Baseline Response'. Users must either have name 'Y1' for this column in their data or provide the name for this column as per their dataset.
 #' @param Attempts Column having values 'Number of Attempts'. Users must either have name 'R' for this column in their data or provide the name for this column as per their dataset.
+#' @param AttemptsMax Maximum Number of Attempts to collect the output
+#' @param ParamSens The Sensitivity Parameter C; Possible Values 0,1,2,3.
 #' @return The summary of the posterior distribution. User will get an object named 'Results' in the global environment. Corresponding values for any particular column can be obtained by Results$columnname.
 #' @export
 #' @import rjags
 #' @import xtable
 #' @import utils
 
-PMM <- function(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1", Attempts = "R", Intervention = "Z", NumberofIndicators= 3, n.chains = 2 , n.adapt = 1000)
+PMM <- function(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1", Attempts = "R", Intervention = "Z", NumberofIndicators= 3, n.chains = 2 , n.adapt = 1000, AttemptsMax = 3, ParamSens=0)
 {
   dat <- read.table(Dataset, header=T)
 
   if(is.null(dat[[Attempts]]) | is.null(dat[[Response]]) | is.null(dat[[BaselineResponse]]) | is.null(dat[[Intervention]])){
-    e <- simpleError("Could not find one of the argument columns. Please provide the columns in the right order and with the right name")
+    e <- simpleError("Could not find one or more argument columns. Please provide the columns in the right order and with the right name in case they are named differently than the default names (Y2, Y1, R, or Z).")
     stop(e)
     }
 
@@ -42,8 +44,10 @@ PMM <- function(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1", At
   L2 <- L*2
   M <- matrix(c(1.3333, -0.5, 0.3333, 0, -0.6667, 0.5), ncol=3)
   a <- rep(1, 4)
+  k <- AttemptsMax
+  c <- ParamSens
 
-  input <- list("Y"=dat[[Response]], "R"=dat[[Attempts]], "Z"=dat[[Intervention]], "X"=Xcomp, "a"=a, "M"=M, "K"=3, "C"=0, "L"=L, "L2"=L2)
+  input <- list("Y"=dat[[Response]], "R"=dat[[Attempts]], "Z"=dat[[Intervention]], "X"=Xcomp, "a"=a, "M"=M, "K"= k, "C"=c, "L"=L, "L2"=L2)
 
   X_mc <- matrix(rep(c(39, 1, 0, 0, 0), L2), ncol=5, byrow=TRUE)
 
@@ -55,7 +59,7 @@ PMM <- function(Dataset, Modelfile, Response = "Y2", BaselineResponse = "Y1", At
 
   Results <- NULL
   Results <<- summary(out)
-  print("The posterior summaries are stored in the 'Results' Variable (Object type 'list'). Examples Usage: Result$statistics")
+  print("The posterior summaries are stored in the 'Results' Variable (Object type 'list'). Examples Usage: type 'Results$statistics'")
 
 }
 

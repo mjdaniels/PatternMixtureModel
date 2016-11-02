@@ -12,10 +12,10 @@ knitr::opts_chunk$set(
 )
 ```
 
-# RAMPMM package
+# PatternMixtureModel package
 
 The goal of the package is to perform the nonignorable analyses through the Pattern Mixture approach for the Analysis of Repeated Attempt Data. 
-In our pattern mixture formulation of the Repeated Attempts Model, denoted as RAMPMM, the patterns are defined by the values of R ( the number of attempts until the outcome is successfully collected; Maximum up to K attempts where R = K + 1 corresponds to the outcome not being collected after the maximum number of attempts). We use the hazard model for the conditional distribution of the pattern indicator. 
+In our pattern mixture ( PM model) formulation of the Repeated Attempts Model, the patterns are defined by the values of R ( the number of attempts until the outcome is successfully collected; Maximum up to K attempts where R = K + 1 corresponds to the outcome not being collected after the maximum number of attempts). We use the hazard model for the conditional distribution of the pattern indicator. 
 
 The Covariates (Xs) are the baseline response and indicators of the centers. The conditional distribution of the Response ( for the pattern R = k , where k = 1, . . . , K + 1) is a normal distribution with mean and variance depending on covariates and patterns.
 
@@ -41,7 +41,7 @@ For the Indicator Centers (Xs), the User dataset must have Xs starting from 5th 
 
 2.  a JAGS code file that specifies a model in it. WINBUGS (Windows version of Bayesian inference Using Gibbs Sampling) is a MCMC software to implement Gibbs sampling, which generates samples from the posterior distribution. Alternative to WINBUGS is JAGS that is accessed in R via rjags to perform the Gibbs sampling. JAGS, written in C++, gets installed outide R and the user of this package must have it installed on their system. For help and instructions on how to install JAGS, user can visit https://sourceforge.net/projects/mcmc-jags/files/ and download the latest version, 4.2.0 based user's Operating System.
 
-The model file has deterministic relations, stochastic relations through distributions suported in JAGS, and priors. The code is written in a dialect of the BUGS language that specifies the model. A model file Model_JAGSfile.txt' is provided with this pacakge inside the inst/ folder.
+The model file has deterministic relations, stochastic relations through distributions suported in JAGS, and priors. The code is written in a dialect of the BUGS language that specifies the model. A model file 'Model_JAGSfile.txt' is provided with this pacakge inside the inst/ folder.
 
 Rjags' jags.model() function sends the model in the file to JAGS for parsing and compiling. On compilation, the code syntax is turned into a set of sequential instructions and the compiler resolves the names and links in the model. The function generates 1000 samples (updates) of the MCMC algorithm.
 
@@ -65,10 +65,15 @@ This is a basic example which shows you how to solve a common problem:
 ```{r example}
 # Run the function by following command
 
-# You will have to provide two files, 1. the dataset file 2. the JAGS model file. ( NOTE: if they are not in the same working directory, then provide the full path to the files.)
-# Also, the dataset must have the column names either as default names for each column in the argument or provide the respective names while calling this function.
+# You will have to provide two files, 1. the dataset file 2. the JAGS model file. ( NOTE: if they are not in your present working directory, then provide the full path to the file.)
+# The dataset file must have the column names either as default names for each column in the argument or provide the respective names while calling this function.
 
-PatternMixtureModel::PMM("/Users/as82986/Datasetfile.txt", system.file("extdata", "Model_JAGSfile.txt", package = "PatternMixtureModel"))
+# The pacakge has a artificial dataset values given in the data/ field. It is a .rda file and can be loaded into a file as write.table(ProjectData, nameOftheFile.txt) and can be used to see the functionality of this pacakge. Alternativetly, you can provide your own dataset file.
+
+# The model file 'Model_JAGSfile.txt' is provided with this pacakge inside the inst/extdata/ folder and will be automatically installed so as to access it when the package gets installed. Without having to download it, you can call it by writing 'system.file("extdata", "Model_JAGSfile.txt", package = "PatternMixtureModel")' in place where 'the JAGS model file' is needed.  Alternativetly, you can provide your own JAGS model file.
+
+# Example command
+PatternMixtureModel::PMM("/pathToTheFile/Datasetfile.txt", system.file("extdata", "Model_JAGSfile.txt", package = "PatternMixtureModel"))
 
 
 ```
