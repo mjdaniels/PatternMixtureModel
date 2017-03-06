@@ -51,7 +51,7 @@ The object returned is of class 'mcmc.list'. The summary() method on this object
 
 ## Installation
 
-You can install Q6 from github with:
+You can install this package from github with:
 
 ```{r gh-installation, eval = FALSE}
 # install.packages("devtools")
